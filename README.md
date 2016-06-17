@@ -17,7 +17,7 @@ npm install npm -g
 
 ```
 npm install musicmatch
-npm install @jonny/spotify-web-helper
+npm install "@jonny/spotify-web-helper"
 ```
 * Download [NW.js NORMAL](http://nwjs.io/)
 * Unzip the contents of the folder in the zip into the repo folder (nw.exe should be in the same directory as package.json)
