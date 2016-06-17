@@ -1,0 +1,10 @@
+{
+  "name": "testapp",
+  "main": "index.html",
+  "window": {
+    "always_on_top": true,
+	"resizable": true,
+	"frame": false,
+	"transparent": true
+  }
+}

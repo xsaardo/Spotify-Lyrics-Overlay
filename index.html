@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title id = "title">Lyrics!</title>
+	<style>
+	body {text-align: center;
+	}
+	pre {white-space: pre-wrap;
+	}
+	</style>
+	
+	<script>
+		window.moveTo(window.screen.availWidth,150);
+	</script>
+	
+  </head>
+  <h1 style="-webkit-app-region: drag">
+	<script src = "getplaying.js"></script>
+	
+	<button type="button" onclick="getlyrics()" style="-webkit-app-region: no-drag">Refresh</button>
+	
+	<button type="button" onclick="hidelyrics()" style="-webkit-app-region: no-drag">Hide Lyrics</button>
+	
+	<button type="button" onclick="window.close()" style="-webkit-app-region: no-drag">Close</button>
+  </h1>
+  
+  <body style="-webkit-app-region: no-drag">
+	
+	<pre style = "font-size:11px" style="-webkit-app-region: no-drag">
+	<span id = "lyrics" style="background-color: #FFFFFF"></span>
+	</pre>
+	
+  </body>
+</html>
