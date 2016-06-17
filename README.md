@@ -20,6 +20,9 @@ npm install musicmatch
 npm install "@jonny/spotify-web-helper"
 ```
 * Download [NW.js NORMAL](http://nwjs.io/)
+
 * Unzip the contents of the folder in the zip into the repo folder (nw.exe should be in the same directory as package.json)
+
 * If the above setup is done correctly /Spotify-Lyrics-Overlay-master should also contain a node_modules folder and nw.exe
-* Run nw.exe
+
+* Run nw.exe (If any time it doesn't seem to be working restart the SpotifyWebHelper.exe process located at $APPDATA%/Roaming/Spotify/)
