@@ -6,6 +6,7 @@ Displays lyrics for the current track playing on Spotify on top of all other win
 
 * Ensure you have the latest version of npm 
 
+Using Powershell: 
 ```
 npm install npm -g
 ```
