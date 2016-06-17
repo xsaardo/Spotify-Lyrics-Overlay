@@ -1,4 +1,7 @@
 
+var hide = true;
+var currLyrics = "";
+
 var getlyrics = function() {
 	window.resizeTo(400,500);
 	var SpotifyWebHelper = require('@jonny/spotify-web-helper')
@@ -19,7 +22,8 @@ var getlyrics = function() {
 				document.getElementById("lyrics").innerHTML = artist + ' - ' + song + '\n' + "Instrumental";
 			}
 			else {
-				document.getElementById("lyrics").innerHTML = trackfound.message.body.lyrics.lyrics_body;
+				currLyrics = '\n' + trackfound.message.body.lyrics.lyrics_body;
+				document.getElementById("lyrics").innerHTML = currLyrics;
 			}
 			
 		}).catch(function(err){
@@ -31,7 +35,15 @@ var getlyrics = function() {
 };
 
 var hidelyrics = function() {
-	document.getElementById("lyrics").innerHTML = "";
-	window.resizeTo(250,10);
+	if (hide) {
+		document.getElementById("lyrics").innerHTML = "";
+		window.resizeTo(250,10);
+		hide = false;
+	}
+	else {
+		document.getElementById("lyrics").innerHTML = currLyrics;
+		window.resizeTo(400,500);
+		hide = true;
+	}
 };
 
