@@ -3,9 +3,10 @@
   <head>
 	<title id = "title">Lyrics!</title>
 	<style>
+	
 	body {text-align: center;
 	}
-	pre {white-space: pre-wrap;
+	span {white-space: pre-wrap;
 	}
 	</style>
 	
@@ -19,7 +20,7 @@
 	
 	<button type="button" onclick="getlyrics()" style="-webkit-app-region: no-drag">Refresh</button>
 	
-	<button type="button" onclick="hidelyrics()" style="-webkit-app-region: no-drag">Hide Lyrics</button>
+	<button id="showhide" type="button" onclick="hidelyrics()" style="-webkit-app-region: no-drag">Hide Lyrics</button>
 	
 	<button type="button" onclick="window.close()" style="-webkit-app-region: no-drag">Close</button>
   </h1>
