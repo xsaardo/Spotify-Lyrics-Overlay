@@ -24,7 +24,7 @@
 				
 				<tr><td>
 				<div class="actions"><button onclick="getlyrics()">Get Lyrics</button>
-				<button id="showhide" onclick="hidelyrics()">Hide Lyrics</button>
+				<button id="showhide" style="width:100px" onclick="hidelyrics()">Hide Lyrics</button>
 				<button onclick="window.close()">Close</button></div></td></tr>
 				
 				</table>
@@ -33,9 +33,9 @@
 			</td>
 			</tr></table>
 		</div>
-		
+		<div class="lyricsOuter">
 		<div class="lyrics" id="lyrics"></div>
-		
+		</div>
 		<script>
 			window.onload = getlyrics();
 		</script>

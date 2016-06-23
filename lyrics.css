@@ -20,10 +20,6 @@ button {
 	min-height: 110px;
 }
 
-pre {
-	
-}
-
 .lyrics {
 	overflow-x: hidden;
 	height: 70vh;
@@ -33,7 +29,17 @@ pre {
 	font-size: 12px;
 	-webkit-app-region: no-drag;
 	font-family: "Verdana";
+	height: 100%;
+    width: 100%;
+    padding-right: 17px;
 }
+
+.lyricsOuter {
+	height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
 
 .info {
 	font-size: 14px;

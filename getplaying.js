@@ -1,13 +1,15 @@
 
 var hide = true;
 var currLyrics = "";
+var currHeight = 0;
+var currWidth = 0;
 
 var getlyrics = function() {
 	
 	var SpotifyWebHelper = require('@jonny/spotify-web-helper')
 	var music = require('musicmatch')();
 	
-	window.resizeTo(370,500);
+	window.resizeTo(370,420);
 	var helper = SpotifyWebHelper()
 	
 	document.getElementById("lyrics").innerHTML = "";
@@ -25,10 +27,14 @@ var getlyrics = function() {
 				
 				document.getElementById("albumart").src = trackfound.message.body.track.album_coverart_100x100;
 				
+				if (trackfound.message.body.track.has_lyrics == 0) {
+					altLyricsSearch(song,artist);
+				}
+				
 				music.trackLyrics({track_id:trackfound.message.body.track.track_id})
 				.then(function(lyricsfound) {
 					if (lyricsfound.message.body.lyrics.instrumental){
-						currLyrics = '\n' + "Instrumental";
+						currLyrics = "Instrumental";
 						document.getElementById("lyrics").innerHTML = currLyrics;
 					}
 					
@@ -37,7 +43,7 @@ var getlyrics = function() {
 					}
 					
 					else {
-						currLyrics = '\n' + lyricsfound.message.body.lyrics.lyrics_body;
+						currLyrics = lyricsfound.message.body.lyrics.lyrics_body;
 						document.getElementById("lyrics").innerHTML = currLyrics;
 					}
 				})
@@ -52,13 +58,13 @@ var getlyrics = function() {
 var hidelyrics = function() {
 	if (hide) {
 		document.getElementById("lyrics").innerHTML = "";
-		window.resizeTo(250,10);
+		window.resizeTo(370,120);
 		hide = false;
 		document.getElementById("showhide").innerHTML = "Show Lyrics";
 	}
 	else {
 		document.getElementById("lyrics").innerHTML = currLyrics;
-		window.resizeTo(400,500);
+		window.resizeTo(370,420);
 		hide = true;
 		document.getElementById("showhide").innerHTML = "Hide Lyrics";
 	}
@@ -93,8 +99,9 @@ function httpGet(theUrl)
 			htmlcode = xmlhttp.responseText;
 			htmlcode = htmlcode.substring(htmlcode.search("Sorry about that. -->"));
 			htmlcode = htmlcode.substring(23,htmlcode.search("</div>"));
-			document.getElementById("lyrics").innerHTML = '\n' + htmlcode;
-			currLyrics = '\n' + htmlcode;
+			htmlcode = htmlcode.replace("<br>","");
+			document.getElementById("lyrics").innerHTML =htmlcode;
+			currLyrics = htmlcode;
         }
     }
 	
