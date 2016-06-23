@@ -18,6 +18,7 @@ npm install npm -g
 ```
 npm install musicmatch
 npm install "@jonny/spotify-web-helper"
+npm install xmlhttprequest
 ```
 * Download [NW.js NORMAL](http://nwjs.io/)
 
