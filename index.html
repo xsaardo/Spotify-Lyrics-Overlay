@@ -1,35 +1,45 @@
 <!DOCTYPE html>
 <html>
+  
   <head>
+	<link href="lyrics.css" rel="stylesheet"  type="text/css">
 	<title id = "title">Lyrics!</title>
-	<style>
-	
-	body {text-align: center;
-	}
-	span {white-space: pre-wrap;
-	}
-	</style>
-	
+	<script src = "getplaying.js"></script>
 	<script>
 		window.moveTo(window.screen.availWidth,150);
 	</script>
-	
   </head>
-  <h1 style="-webkit-app-region: drag">
-	<script src = "getplaying.js"></script>
-	
-	<button type="button" onclick="getlyrics()" style="-webkit-app-region: no-drag">Refresh</button>
-	
-	<button id="showhide" type="button" onclick="hidelyrics()" style="-webkit-app-region: no-drag">Hide Lyrics</button>
-	
-	<button type="button" onclick="window.close()" style="-webkit-app-region: no-drag">Close</button>
-  </h1>
   
-  <body style="-webkit-app-region: no-drag">
+  <body>
 	
-	<pre style = "font-size:11px" style="-webkit-app-region: no-drag">
-	<span id = "lyrics" style="background-color: #FFFFFF"></span>
-	</pre>
+	
+		<div class="header1">
+			<table><tr>
+			<td><img id="albumart" src="" alt="Album Art"></td>
+			
+			<td>
+				
+				<table>
+				<tr><td><div id="class1" class="info"></div></td></tr>
+				
+				<tr><td>
+				<div class="actions"><button onclick="getlyrics()">Get Lyrics</button>
+				<button id="showhide" onclick="hidelyrics()">Hide Lyrics</button>
+				<button onclick="window.close()">Close</button></div></td></tr>
+				
+				</table>
+				
+				
+			</td>
+			</tr></table>
+		</div>
+		
+		<div class="lyrics" id="lyrics"></div>
+		
+		<script>
+			window.onload = getlyrics();
+		</script>
 	
   </body>
+  
 </html>

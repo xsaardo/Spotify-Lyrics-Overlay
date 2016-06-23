@@ -30,5 +30,5 @@ make buttons independent of scrolling
 change size of frame according to lyric height
 minimize to dock
 transparent scroll bar
-
+settings
 other project ideas

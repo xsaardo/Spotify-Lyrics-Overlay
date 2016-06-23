@@ -7,8 +7,7 @@ var getlyrics = function() {
 	var SpotifyWebHelper = require('@jonny/spotify-web-helper')
 	var music = require('musicmatch')();
 	
-	window.resizeTo(400,500);
-	
+	window.resizeTo(370,500);
 	var helper = SpotifyWebHelper()
 	
 	document.getElementById("lyrics").innerHTML = "";
@@ -17,26 +16,31 @@ var getlyrics = function() {
 		var song = helper.status.track.track_resource.name;
 		var artist = helper.status.track.artist_resource.name;
 		
-		music.matcherLyrics({q_track: song, q_artist: artist})
+		document.getElementById("title").innerHTML =  artist + ' - ' + song;
+		
+		document.getElementById("class1").innerHTML ='<b>' + artist + '</b><br><i>' + song +'</i>';
+			
+		music.matcherTrack({q_track: song, q_artist: artist})
 		.then(function(trackfound) {
-
-			document.getElementById("title").innerHTML =  artist + ' - ' + song;
-			
-			
-				if (trackfound.message.body.lyrics.instrumental){
-					currLyrics = '\n' + artist + ' - ' + song + '\n' + "Instrumental";
-					document.getElementById("lyrics").innerHTML = currLyrics;
-				}
 				
-				else if (trackfound.message.body.lyrics.restricted){
-					altLyricsSearch(song,artist);
-				}
+				document.getElementById("albumart").src = trackfound.message.body.track.album_coverart_100x100;
 				
-				else {
-					currLyrics = '\n' + artist + ' - ' + song + '\n' + trackfound.message.body.lyrics.lyrics_body;
-					document.getElementById("lyrics").innerHTML = currLyrics;
-				}
-			
+				music.trackLyrics({track_id:trackfound.message.body.track.track_id})
+				.then(function(lyricsfound) {
+					if (lyricsfound.message.body.lyrics.instrumental){
+						currLyrics = '\n' + "Instrumental";
+						document.getElementById("lyrics").innerHTML = currLyrics;
+					}
+					
+					else if (lyricsfound.message.body.lyrics.restricted){
+						altLyricsSearch(song,artist);
+					}
+					
+					else {
+						currLyrics = '\n' + lyricsfound.message.body.lyrics.lyrics_body;
+						document.getElementById("lyrics").innerHTML = currLyrics;
+					}
+				})
 		}).catch(function(err){
 			altLyricsSearch(song,artist);
 		});

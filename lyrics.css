@@ -1,0 +1,47 @@
+body {
+	text-align: center;
+	-webkit-app-region: drag;
+	background-color: rgba(0,0,0,0.6);
+	color: #FFFFFF;
+	overflow: hidden;
+	font-family: "Verdana";
+}
+
+button {
+	-webkit-app-region: no-drag;
+	type: button;
+	font-family: "Verdana"
+}
+
+.header1 {
+	-webkit-app-region: drag;
+	overflow: hidden;
+	height: 20vh;
+	min-height: 110px;
+}
+
+pre {
+	
+}
+
+.lyrics {
+	overflow-x: hidden;
+	height: 70vh;
+	overflow-y: scroll;
+	max-height: 70vh;
+	white-space: pre-wrap;
+	font-size: 12px;
+	-webkit-app-region: no-drag;
+	font-family: "Verdana";
+}
+
+.info {
+	font-size: 14px;
+}
+
+table {border: 0px solid #000; border-collapse: collapse; width: 100%}
+
+.actions {
+	vertical-align: middle;
+}
+
