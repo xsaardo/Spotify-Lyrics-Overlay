@@ -27,3 +27,6 @@ npm install xmlhttprequest
 * If the above setup is done correctly /Spotify-Lyrics-Overlay-master should also contain a node_modules folder and nw.exe
 
 * Run nw.exe (If any time it doesn't seem to be working restart the SpotifyWebHelper.exe process located at $APPDATA%/Roaming/Spotify/)
+
+* Example: ![alt tag](https://www.dropbox.com/s/l70lu0xjc09kijm/Screenshot%202016-06-22%2019.33.28.png?dl=0) 
+
