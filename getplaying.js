@@ -4,8 +4,11 @@ var currLyrics = "";
 var currHeight = 0;
 var currWidth = 0;
 
+
+
 var getlyrics = function() {
-	
+	hide = true;
+	document.getElementById("showhide").innerHTML = "Hide Lyrics";
 	var SpotifyWebHelper = require('@jonny/spotify-web-helper')
 	var music = require('musicmatch')();
 	
@@ -21,7 +24,41 @@ var getlyrics = function() {
 		document.getElementById("title").innerHTML =  artist + ' - ' + song;
 		
 		document.getElementById("class1").innerHTML ='<b>' + artist + '</b><br><i>' + song +'</i>';
+		/*
+		artist = artist.replace(/[^\w]|_/g, "");
+		artist = artist.toLowerCase();
+		
+		song = song.replace(/[^\w]|_/g, "");
+		song = song.toLowerCase();
+		*/
+		
+		$.getJSON("http://api.musixmatch.com/ws/1.1/matcher.track.get?q_artist="+artist+"&q_track="+song+"&apikey=d6b13470cafb0e694399017249e66227&callback=trackfound", function(trackfound) {
+		
+			document.getElementById("albumart").src = trackfound.message.body.track.		album_coverart_100x100;
+				
+			if (trackfound.message.body.track.has_lyrics == 0) {
+				altLyricsSearch(song,artist);
+			}
 			
+			$.getJSON("http://api.musixmatch.com/ws/1.1/matcher.lyrics.get?q_artist=" + artist + "&q_track=" + song + "&apikey=d6b13470cafb0e694399017249e66227&callback=lyricsfound",function(lyricsfound) {
+				if (lyricsfound.message.body.lyrics.instrumental){
+						currLyrics = "Instrumental";
+						document.getElementById("lyrics").innerHTML = currLyrics;
+				}
+				
+				else if (lyricsfound.message.body.lyrics.restricted){
+					altLyricsSearch(song,artist);
+				}
+				
+				else {
+					currLyrics = lyricsfound.message.body.lyrics.lyrics_body;
+					document.getElementById("lyrics").innerHTML = currLyrics;
+				}
+			});
+			
+		});	
+		
+			/*
 		music.matcherTrack({q_track: song, q_artist: artist})
 		.then(function(trackfound) {
 				
@@ -49,7 +86,7 @@ var getlyrics = function() {
 				})
 		}).catch(function(err){
 			altLyricsSearch(song,artist);
-		});
+		});*/
 		
 	});
 	

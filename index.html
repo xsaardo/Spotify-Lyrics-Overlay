@@ -4,42 +4,66 @@
   <head>
 	<link href="lyrics.css" rel="stylesheet"  type="text/css">
 	<title id = "title">Lyrics!</title>
+	<script src = "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.2.min.js"></script>
 	<script src = "getplaying.js"></script>
 	<script>
 		window.moveTo(window.screen.availWidth,150);
+		
+		var win = nw.Window.get();
+		var tray;
+		var menu = new nw.Menu();
+		
+		menu.append(new nw.MenuItem({
+			type: "normal",
+			label: "Exit",
+			click: function() {win.close()}
+			}))
+		
+		win.on('minimize', function() {
+			this.hide();
+			tray = new nw.Tray({icon: 'spotifyicon.png'});
+			tray.menu = menu;
+			tray.on('click', function() {
+				win.show();
+				win.focus();
+				win.resizeTo(370,420);
+				this.remove();
+				tray = null;
+			});
+		});
 	</script>
   </head>
   
   <body>
-	
-	
-		<div class="header1">
-			<table><tr>
-			<td><img id="albumart" src="" alt="Album Art"></td>
-			
-			<td>
+	<div class="header1">
+		<table>
+			<tr>
+				<td><img id="albumart" src="" alt="Album Art"></td>
 				
-				<table>
-				<tr><td><div id="class1" class="info"></div></td></tr>
-				
-				<tr><td>
-				<div class="actions"><button onclick="getlyrics()">Get Lyrics</button>
-				<button id="showhide" style="width:100px" onclick="hidelyrics()">Hide Lyrics</button>
-				<button onclick="window.close()">Close</button></div></td></tr>
-				
-				</table>
-				
-				
-			</td>
-			</tr></table>
-		</div>
-		<div class="lyricsOuter">
+				<td>
+					<table>
+					<tr><td><div id="class1" class="info"></div></td></tr>
+					
+					<tr><td>
+						<div class="actions">
+							<button onclick="getlyrics()">Get Lyrics</button>							
+							<button id="showhide" style="width:100px" onclick="hidelyrics()">Hide Lyrics</button>
+							
+							<button onclick="win.minimize()">Close</button>
+						</div>
+					</td></tr>
+					
+					</table>	
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="lyricsOuter">
 		<div class="lyrics" id="lyrics"></div>
-		</div>
-		<script>
-			window.onload = getlyrics();
-		</script>
-	
+	</div>
+	<script>
+		window.onload = getlyrics();
+	</script>
   </body>
   
 </html>
