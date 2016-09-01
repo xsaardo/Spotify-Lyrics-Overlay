@@ -6,6 +6,7 @@ var currWidth = 0;
 
 var getlyrics = function() {
 	hide = true;
+	
 	document.getElementById("showhide").innerHTML = "Hide Lyrics";
 	
 	var SpotifyWebHelper = require('@jonny/spotify-web-helper');
@@ -32,7 +33,7 @@ var getlyrics = function() {
 			var searchterm = song + " " + artist;
 			
 			// Get lyrics
-			$.getJSON("http://api.genius.com/search?q=" + searchterm + "&access_token=Et0edLuuw1UqlTV1QlvgUg0WNPqmAgNnJ5UbbB6giV74xIZyJic2JxvNpzeXYGCa", function(json){
+			$.getJSON("http://api.genius.com/search?q=" + searchterm + "&access_token=Et0edLuuw1UqlTV1QlvgUg0WNPqmAgNnJ5UbbB6giV74xIZyJic2JxvNpzeXYGCa&callback=json", function(json){
 				var url = json.response.hits[0].result.url;
 				url = url.slice(0,18) + "amp/" + url.slice(18);
 				//alert(url);
@@ -75,6 +76,9 @@ function httpGet(theUrl)
 			htmlcode = htmlcode.substring(21,htmlcode.search("</p>"));
 			// Strip html tags
 			htmlcode = htmlcode.replace(/<(?:.|\n)*?>/gm, ''); 
+			if (htmlcode == "") {
+				currLyrics = 'Instrumental';
+			}
 			currLyrics = htmlcode;
 			document.getElementById("lyrics").innerHTML = htmlcode;
         }
