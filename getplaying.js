@@ -65,7 +65,7 @@ function httpGet(theUrl)
 	var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
     var xmlhttp = new XMLHttpRequest();
     var htmlcode;
-	
+	alert(theUrl)
     xmlhttp.onreadystatechange=function()
     {
         if (xmlhttp.readyState==4 && xmlhttp.status==200)
@@ -73,6 +73,7 @@ function httpGet(theUrl)
 			htmlcode = xmlhttp.responseText;
 			// Isolate lyrics html
 			htmlcode = htmlcode.substring(htmlcode.search('<div class="lyrics">'));
+			
 			htmlcode = htmlcode.substring(21,htmlcode.search("</p>"));
 			// Strip html tags
 			htmlcode = htmlcode.replace(/<(?:.|\n)*?>/gm, ''); 
