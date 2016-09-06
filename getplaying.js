@@ -24,22 +24,18 @@ var getlyrics = function() {
 		// Write header (song + artist)
 		document.getElementById("title").innerHTML =  artist + ' - ' + song;
 		document.getElementById("class1").innerHTML ='<b>' + artist + '</b><br><i>' + song +'</i>';
+						
+		var searchterm = artist + " " + song;
 		
-		// Use musicmatch to find song
-		$.getJSON("http://api.musixmatch.com/ws/1.1/matcher.track.get?q_artist="+artist+"&q_track="+song+"&apikey=d6b13470cafb0e694399017249e66227&callback=trackfound", function(trackfound) {
-			// Set album art
-			document.getElementById("albumart").src = trackfound.message.body.track.album_coverart_100x100;
-				
-			var searchterm = song + " " + artist;
-			
-			// Get lyrics
-			$.getJSON("http://api.genius.com/search?q=" + searchterm + "&access_token=Et0edLuuw1UqlTV1QlvgUg0WNPqmAgNnJ5UbbB6giV74xIZyJic2JxvNpzeXYGCa&callback=json", function(json){
-				var url = json.response.hits[0].result.url;
-				url = url.slice(0,18) + "amp/" + url.slice(18);
-				//alert(url);
-				httpGet(url);
-			});
-		});	
+		// Get lyrics
+		$.getJSON("http://api.genius.com/search?q=" + searchterm + "&access_token=Et0edLuuw1UqlTV1QlvgUg0WNPqmAgNnJ5UbbB6giV74xIZyJic2JxvNpzeXYGCa&callback=json", function(json){
+			document.getElementById("albumart").src = json.response.hits[0].result.header_image_url;
+			var url = json.response.hits[0].result.url;
+			url = url.slice(0,18) + "amp/" + url.slice(18);
+			//alert(url);
+			httpGet(url);
+		});
+	
 		
 	});
 	
@@ -65,7 +61,7 @@ function httpGet(theUrl)
 	var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
     var xmlhttp = new XMLHttpRequest();
     var htmlcode;
-	alert(theUrl)
+	
     xmlhttp.onreadystatechange=function()
     {
         if (xmlhttp.readyState==4 && xmlhttp.status==200)
@@ -75,16 +71,42 @@ function httpGet(theUrl)
 			htmlcode = htmlcode.substring(htmlcode.search('<div class="lyrics">'));
 			
 			htmlcode = htmlcode.substring(21,htmlcode.search("</p>"));
+			console.log(htmlcode);
+			
 			// Strip html tags
 			htmlcode = htmlcode.replace(/<(?:.|\n)*?>/gm, ''); 
 			if (htmlcode == "") {
 				currLyrics = 'Instrumental';
 			}
+			
+			// Add extra <br>
+			var indices = findAllSubstringInd(htmlcode,"[");
+			
+			for (var index in indices) {
+				htmlcode = htmlcode.slice(0,indices[index]+index*4) + '<br>' + htmlcode.slice(indices[index]+index*4);
+			}
+			
 			currLyrics = htmlcode;
+			
 			document.getElementById("lyrics").innerHTML = htmlcode;
         }
     }
 	
     xmlhttp.open("GET", theUrl, true);
     xmlhttp.send();
+}
+
+function findAllSubstringInd(str, substring) {
+	var indices = new Array();
+	var j = 0;
+	var i = 1;
+	while (i > 0) {
+		i = str.indexOf(substring,i);
+		indices[j] = i;
+		i = i+1;
+		//console.log(i);
+		j++;
+	}
+	indices.pop();
+	return indices;
 }
