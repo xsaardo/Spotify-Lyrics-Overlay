@@ -1,3 +1,9 @@
+img {
+	height: 100px;
+	width: 100px;
+	border-radius: 5px;
+}
+
 body {
 	text-align: center;
 	-webkit-app-region: drag;
@@ -13,11 +19,16 @@ button {
 	font-family: "Verdana"
 }
 
+.albumart {
+	padding-top: 10px;
+	padding-left: 10px;
+	padding-right: 0px;
+}
 .header1 {
 	-webkit-app-region: drag;
 	overflow: hidden;
 	height: 20vh;
-	min-height: 110px;
+	min-height: 120px;
 }
 
 .lyrics {
@@ -31,7 +42,12 @@ button {
 	font-family: "Verdana";
 	height: 100%;
     width: 100%;
-    padding-right: 17px;
+    padding-right: 10px;
+	padding-left: 10px;
+}
+
+.class1 {
+	text-align: center;
 }
 
 .lyricsOuter {
@@ -40,6 +56,19 @@ button {
     overflow: hidden;
 }
 
+.addbuttonsdiv {
+	position: absolute;
+	right: 7px;
+	top: 3px;
+}
+
+.addbuttons {
+	margin: 2px;
+}
+
+.glyphicon {
+    font-size: 15px;
+}
 
 .info {
 	font-size: 14px;

@@ -17,8 +17,8 @@
 	<div class="header1">
 		<table>
 			<tr>
-				<td>
-					<div class="albumart">
+				<td style="width:100px">
+					<div class="albumart text-left">
 						<img id="albumart" src="" alt="Album Art">
 					</div>
 				</td>
@@ -38,7 +38,7 @@
 						<tr><td><div id="class1" class="info"></div></td></tr>
 						
 						<tr><td>
-							<div class="actions">
+							<div class="actions text-center">
 								<button class="btn btn-primary" style="width:100px" onclick="getlyrics()">Get Lyrics</button>							
 								<button class="btn btn-success" id="showhide" style="width:100px" onclick="hidelyrics()">Hide Lyrics</button>
 							</div>
@@ -55,7 +55,14 @@
 	</div>
 	
 	<script>
-		window.onload = getlyrics();
+		window.onload = function() {
+			window.moveTo(window.screen.availWidth,150);
+			window.resizeTo(350,420);
+			console.log("hi")
+			var winHeight = 420;
+			var winWidth = 350;
+			getlyrics();
+		}
 	</script>
   </body>
   

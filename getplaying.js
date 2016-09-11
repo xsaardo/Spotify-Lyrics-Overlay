@@ -1,25 +1,30 @@
-window.moveTo(window.screen.availWidth,150);
-
-
 // Global Vars
 var hide = true;
 var currLyrics = "";
 var currHeight = 0;
 var currWidth = 0;
 
+
+// Init
+
 var defaultArtSrc = "https://assets.genius.com/images/default_cover_image.png?1473449143"
 
 var getlyrics = function() {
+	if (!hide){
+		window.resizeTo(350,420);
+	}
 	hide = true;
 	var song = "";
 	var artist = "";
+	var winWidth = $(window).width();
+	console.log(winWidth)
+	var winHeight = $(window).height();
+	//window.resizeTo(winWidth,winHeight);
 	
 	currLyrics = "";
 	document.getElementById("albumart").src = "";
 	document.getElementById("showhide").innerHTML = "Hide Lyrics";
 	document.getElementById("lyrics").innerHTML = ""; // Clear window
-	
-	window.resizeTo(350,420);
 	
 	var SpotifyWebHelper = require('@jonny/spotify-web-helper');
 	var helper = SpotifyWebHelper();
@@ -66,6 +71,8 @@ var getlyrics = function() {
 
 var hidelyrics = function() {
 	if (hide) {
+		winWidth = $(window).width()
+		winHeight = $(window).height()
 		document.getElementById("lyrics").innerHTML = "";
 		window.resizeTo(350,120);
 		hide = false;
@@ -78,7 +85,7 @@ var hidelyrics = function() {
 		else {
 			document.getElementById("lyrics").innerHTML = currLyrics;
 		}
-		window.resizeTo(350,420);
+		window.resizeTo(winWidth,winHeight);
 		hide = true;
 		document.getElementById("showhide").innerHTML = "Hide Lyrics";
 	}
