@@ -3,7 +3,7 @@ var hide = true;
 var currLyrics = "";
 var currHeight = 0;
 var currWidth = 0;
-
+var placeholderImg = "http://larics.rasip.fer.hr/wp-content/uploads/2016/04/default-placeholder.png"
 
 // Init
 
@@ -22,9 +22,13 @@ var getlyrics = function() {
 	//window.resizeTo(winWidth,winHeight);
 	
 	currLyrics = "";
-	document.getElementById("albumart").src = "";
+	document.getElementById("albumart").src = placeholderImg;
 	document.getElementById("showhide").innerHTML = "Hide Lyrics";
 	document.getElementById("lyrics").innerHTML = ""; // Clear window
+	
+	// Show loading animation
+	document.getElementById("loader").style.display = "block";
+	
 	
 	var SpotifyWebHelper = require('@jonny/spotify-web-helper');
 	var helper = SpotifyWebHelper();
@@ -54,15 +58,16 @@ var getlyrics = function() {
 			}
 			catch(err) {
 				currLyrics = 'Lyrics not found on Genius';
-				document.getElementById("lyrics").innerHTML = currLyrics;	
 			}
 		})
 		.done(function() {
-			// End loading animation here?
-			console.log('GET request successful')
+			console.log('Genius search successful')
+			document.getElementById("loader").style.display = "none";
+			document.getElementById("lyrics").innerHTML = currLyrics;
+			
 		})
 		.fail(function() {
-			alert('Failed GET request')
+			alert('Failed Genius search request')
 		});
 		
 		
@@ -103,6 +108,7 @@ function httpGet(theUrl)
     {
         if (xmlhttp.readyState==4 && xmlhttp.status==200)
         {
+			
 			// Get html for lyrics page
 			htmlcode = xmlhttp.responseText;
 			
@@ -118,14 +124,12 @@ function httpGet(theUrl)
 			for (var index in indices) {
 				htmlcode = htmlcode.slice(0,indices[index]+index*4) + '<br>' + htmlcode.slice(indices[index]+index*4);
 			}
-			
 			currLyrics = htmlcode;
 			
-			document.getElementById("lyrics").innerHTML = htmlcode;
+			// Disable loading animation
+			document.getElementById("loader").style.display = "none";
+			document.getElementById("lyrics").innerHTML = currLyrics;	
         }
-		else {
-			// insert code for loading lyrics (states 0-4)
-		}
     }
 	
 	// Send http request
