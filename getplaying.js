@@ -4,20 +4,45 @@ var currLyrics = "";
 var currHeight = 0;
 var currWidth = 0;
 var placeholderImg = "http://larics.rasip.fer.hr/wp-content/uploads/2016/04/default-placeholder.png";
+
 var SpotifyWebHelper = require('@jonny/spotify-web-helper');
+
 var song = "";
 var artist = "";
 var album = "";
-//var defaultArtSrc = "https://assets.genius.com/images/default_cover_image.png?1473449143"
+var helper = SpotifyWebHelper();
+var gui = require('nw.gui');
+var mainWin = gui.Window.get();
 
-// Init
+var initialLyrics = function() {
+	// Display loading animation
+	document.getElementById("loader").style.display = "block";
+	
+	// Initial load lyrics/album art
+	helper.player.on('ready',function() {
+		console.log("Helper on");
+		getAlbumArt(helper.status.track.album_resource.uri);
+		loadnewlyrics(helper.status.track);
+	});
+	
+	// Upon track change execute...
+	helper.player.on('track-change', function(track){
+		console.log("Track changed");
+		getAlbumArt(track.album_resource.uri);
+		loadnewlyrics(track);
+	});
+}
 
-var getlyrics = function() {
+var getlyrics = function(helper) {
+	console.log("Manual lyric request")
 	// If getlyrics called from hidden state
 	if (!hide){
 		window.resizeTo(350,420);
 	}
 	hide = true;
+	
+	// Show loading animation
+	document.getElementById("loader").style.display = "block";
 	
 	// Remember current window dimensions
 	var winWidth = $(window).width();
@@ -28,53 +53,71 @@ var getlyrics = function() {
 	document.getElementById("showhide").innerHTML = "Hide Lyrics";
 	document.getElementById("lyrics").innerHTML = ""; 
 	
-	var helper = SpotifyWebHelper();
-	// Upon track change execute...
-	helper.player.on('track-change', function(track){
-		// Show loading animation
-		document.getElementById("loader").style.display = "block";
-		
-		// Reset window to default
-		document.getElementById("albumart").src = placeholderImg;
-		document.getElementById("lyrics").innerHTML = ""; // Clear window
-		
-		// Find currently playing song		
-		song = track.track_resource.name;
-		artist = track.artist_resource.name;
-		album = track.album_resource.name;
-		
-		// Write title and header (song + artist)
-		document.getElementById("title").innerHTML =  artist + ' - ' + song;
-		document.getElementById("class1").innerHTML ='<b>' + artist + '</b><br><i>' + song +'</i>';
-						
-		var searchterm = artist + " " + song;
-		
-		// Get lyrics
-		$.getJSON("http://api.genius.com/search?q=" + searchterm + "&access_token=Et0edLuuw1UqlTV1QlvgUg0WNPqmAgNnJ5UbbB6giV74xIZyJic2JxvNpzeXYGCa&callback=json", function(json){
-			try {
-				// Set album art
-				document.getElementById("albumart").src = json.response.hits[0].result.header_image_url;
-				
-				// Get url of lyrics page
-				var url = json.response.hits[0].result.url;
-				url = url.slice(0,18) + "amp/" + url.slice(18);
-				httpGet(url);
-			}
-			catch(err) {
-				currLyrics = 'Lyrics not found on Genius';
-			}
-		})
-		.done(function() {
-			console.log('Genius search successful')
-		})
-		.fail(function() {
-			alert('Failed Genius search request')
-		});
-	});
+	// Initial load lyrics
+	try {
+		loadnewlyrics(helper.status.track);
+	}
+	catch (err) {
+		alert("Error: Could not connect to Spotify")
+	}
 };
+
+var loadnewlyrics = function(track) {
+	// Show loading animation
+	if (hide) {
+		document.getElementById("loader").style.display = "block";
+	}
+	
+	// Reset window to default
+	document.getElementById("albumart").src = placeholderImg;
+	document.getElementById("lyrics").innerHTML = ""; // Clear window
+	
+	// Find currently playing song		
+	song = track.track_resource.name;
+	artist = track.artist_resource.name;
+	album = track.album_resource.name;
+	console.log(artist + " " + song);
+	
+	// Write title and header (song + artist)
+	document.getElementById("title").innerHTML =  artist + ' - ' + song;
+	document.getElementById("class1").innerHTML ='<b>' + artist + '</b><br><i>' + song +'</i>';
+					
+	var searchterm = artist + " " + song;
+	searchterm = searchterm.replace(/[&]/," ");
+	console.log(searchterm);
+	
+	// Get lyrics
+	console.log("Sending JSON request")
+	$.getJSON("http://api.genius.com/search?q=" + searchterm + "&access_token=Et0edLuuw1UqlTV1QlvgUg0WNPqmAgNnJ5UbbB6giV74xIZyJic2JxvNpzeXYGCa&callback=json", function(json){
+		try {
+			// Get url of lyrics page
+			var fulltitle = song + " by " + artist;
+			var url = json.response.hits[0].result.url;
+			
+			url = url.slice(0,18) + "amp/" + url.slice(18);
+			
+			// Get HTML code from url
+			httpGet(url);
+		}
+		catch(err) {
+			console.log(err)
+			console.log("Lyrics not found")
+			currLyrics = 'Lyrics not found on Genius';
+			document.getElementById("lyrics").innerHTML = currLyrics;
+			document.getElementById("loader").style.display = "none";
+		}
+	})
+	.done(function() {
+		console.log('Genius search successful')
+	})
+	.fail(function() {
+		alert('Failed Genius search request')
+	});
+}
 
 var hidelyrics = function() {
 	if (hide) {
+		document.getElementById("loader").style.display = "none";
 		winWidth = $(window).width()
 		winHeight = $(window).height()
 		document.getElementById("lyrics").innerHTML = "";
@@ -108,6 +151,7 @@ function httpGet(theUrl)
 		// Function to execute upon successful http request
         if (xmlhttp.readyState==4 && xmlhttp.status==200)
         {
+			console.log("HTTP request successful");
 			// Get html for lyrics page
 			htmlcode = xmlhttp.responseText;
 			
@@ -133,8 +177,14 @@ function httpGet(theUrl)
     }
 	
 	// Send http request
+	console.log("HTTP request sent")
     xmlhttp.open("GET", theUrl, true);
     xmlhttp.send();
+}
+
+// TODO: Settings windows
+var settings = function(){
+	var settingsWin = window.open('settings.html');
 }
 
 // Helper function: Find all indices of substring in string
@@ -150,4 +200,18 @@ function findAllSubstringInd(str, substring) {
 	}
 	indices.pop();
 	return indices;
+}
+
+// Alternate source of lyrics
+function altSearch(artist, song) {
+	
+}
+
+// Get album art from spotify
+function getAlbumArt(uri) {
+	uri = uri.split(":");
+	uri = uri[2];
+	$.getJSON("https://api.spotify.com/v1/albums/" + uri, function(response){
+		document.getElementById("albumart").src = response.images[0].url
+	})
 }
