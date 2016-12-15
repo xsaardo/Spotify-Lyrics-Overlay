@@ -2,44 +2,72 @@
 <html>
   
   <head>
-	<link href="lyrics.css" rel="stylesheet"  type="text/css">
 	<title id = "title">Lyrics!</title>
+	<!--Load jquery CDN-->
+	<script src = "https://code.jquery.com/jquery-3.1.0.js"></script>
+	<!--Load bootstrap js/css-->
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<!--Personal CSS-->
+	<link href="lyrics.css" rel="stylesheet"  type="text/css">
 	<script src = "getplaying.js"></script>
-	<script>
-		window.moveTo(window.screen.availWidth,150);
-	</script>
+	
+	<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/string_score/0.1.22/string_score.js"></script> -->
   </head>
   
   <body>
+	<div class="header1">
+		<table>
+			<tr>
+				<td style="width:100px">
+					<div class="albumart text-left">
+						<img id="albumart" src="http://larics.rasip.fer.hr/wp-content/uploads/2016/04/default-placeholder.png" alt="Album Art">
+					</div>
+				</td>
+				
+				<td>
+					<table>
+						<tr><td>
+							<div class="addbuttonsdiv">
+								<button type="button" class="addbuttons close" onclick="window.close()">
+									<span class="glyphicon glyphicon-remove" style="color:white" ></span>
+								</button>
+								<button type="button" class="close addbuttons" onclick="settings()">
+									<span class="glyphicon glyphicon-wrench" style="color:white" ></span>
+								</button>
+							</div>
+						</td></tr>
+						<tr><td><div id="class1" class="info"></div></td></tr>
+						
+						<tr><td>
+							<div class="actions text-center">
+								<button class="btn btn-primary" style="width:100px" onclick="getlyrics(helper)">Get Lyrics</button>							
+								<button class="btn btn-success" id="showhide" style="width:100px" onclick="hidelyrics()">Hide Lyrics</button>
+							</div>
+						</td></tr>
+						
+					</table>	
+				</td>
+			</tr>
+		</table>
+	</div>
 	
 	
-		<div class="header1">
-			<table><tr>
-			<td><img id="albumart" src="" alt="Album Art"></td>
-			
-			<td>
-				
-				<table>
-				<tr><td><div id="class1" class="info"></div></td></tr>
-				
-				<tr><td>
-				<div class="actions"><button onclick="getlyrics()">Get Lyrics</button>
-				<button id="showhide" style="width:100px" onclick="hidelyrics()">Hide Lyrics</button>
-				<button onclick="window.close()">Close</button></div></td></tr>
-				
-				</table>
-				
-				
-			</td>
-			</tr></table>
+		<div class="lyricsOuter" style="display:flex;justify-content:center;align-items:center;">
+		  <div class="loader" id="loader" style="width:120px;height:120px;"></div>
 		</div>
-		<div class="lyricsOuter">
 		<div class="lyrics" id="lyrics"></div>
-		</div>
-		<script>
-			window.onload = getlyrics();
-		</script>
+		
 	
+	<script>
+		window.onload = function() {
+			window.moveTo(window.screen.availWidth,150);
+			window.resizeTo(350,420);
+			var winHeight = 420;
+			var winWidth = 350;
+			initialLyrics();
+		}
+	</script>
   </body>
   
 </html>
