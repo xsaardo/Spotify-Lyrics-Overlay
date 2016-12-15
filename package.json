@@ -4,9 +4,11 @@
   "version": "1.0",
   "window": {
     "always_on_top": true,
-	"resizable": true,
-	"frame": false,
-	"transparent": true
+    "resizable": true,
+    "frame": false,
+    "transparent": true
+  },
+  "dependencies": {
+    "string_score": "^0.1.22"
   }
-  
 }
