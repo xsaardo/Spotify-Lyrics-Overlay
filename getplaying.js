@@ -6,7 +6,7 @@ var currWidth = 0;
 var placeholderImg = "http://larics.rasip.fer.hr/wp-content/uploads/2016/04/default-placeholder.png";
 
 var SpotifyWebHelper = require('@jonny/spotify-web-helper');
-
+var lsdist = require('fast-levenshtein')
 var song = "";
 var artist = "";
 var album = "";
@@ -55,6 +55,7 @@ var getlyrics = function(helper) {
 	
 	// Initial load lyrics
 	try {
+		getAlbumArt(helper.status.track.album_resource.uri);
 		loadnewlyrics(helper.status.track);
 	}
 	catch (err) {
@@ -92,9 +93,30 @@ var loadnewlyrics = function(track) {
 		try {
 			// Get url of lyrics page
 			var fulltitle = song + " by " + artist;
+			fulltitle = fulltitle.replace(/[&]/g,"");
 			var url = json.response.hits[0].result.url;
 			
+			// TEST levenshtein distance
+			console.log(fulltitle);
+			console.log(json.response.hits[0].result.full_title);
+			console.log("Score: " + lsdist.get(fulltitle,json.response.hits[0].result.full_title));
+			
+			var similarityScore = lsdist.get(fulltitle,json.response.hits[0].result.full_title);
+			if (similarityScore > 10) {
+				var secondScore = lsdist.get(fulltitle,json.response.hits[1].result.full_title);
+				console.log(secondScore);
+				console.log(json.response.hits[1].result.full_title);
+				if (secondScore > 10) {
+					return;
+					console.log("lyrics not found");
+				}
+				else {
+					url = json.response.hits[1].result.url;
+				}
+			}
+			
 			url = url.slice(0,18) + "amp/" + url.slice(18);
+			
 			
 			// Get HTML code from url
 			httpGet(url);

@@ -35,13 +35,24 @@
 								<button type="button" class="close addbuttons" onclick="settings()">
 									<span class="glyphicon glyphicon-wrench" style="color:white" ></span>
 								</button>
+								<button type="button" class="close addbuttons" onclick="getlyrics(helper)">
+									<span class="glyphicon glyphicon-refresh" style="color:white"></span>
+								</button>
 							</div>
 						</td></tr>
 						<tr><td><div id="class1" class="info"></div></td></tr>
 						
 						<tr><td>
-							<div class="actions text-center">
-								<button class="btn btn-primary" style="width:100px" onclick="getlyrics(helper)">Get Lyrics</button>							
+							<div class="actions text-center dropdown" id="dropdownmenu">
+								<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="width:100px">More Lyrics</button>
+								<div class="dropdown-menu dropdown-menu-left scrollable-menu">
+								  <ul id="artistOptions" style="list-style: none">asdfsdfasd
+									<li> hi </li>
+									<li> hi </li>
+									<li> a </li>
+									<li> a </li>
+								  </ul>
+								</div>
 								<button class="btn btn-success" id="showhide" style="width:100px" onclick="hidelyrics()">Hide Lyrics</button>
 							</div>
 						</td></tr>
