@@ -10,13 +10,13 @@ body {
 	background-color: rgba(0,0,0,0.6);
 	color: #FFFFFF;
 	overflow: hidden;
-	font-family: "Verdana";
+	
 }
 
 button {
 	-webkit-app-region: no-drag;
 	type: button;
-	font-family: "Verdana"
+	
 }
 
 .albumart {
@@ -36,7 +36,7 @@ button {
 	overflow-y: scroll;
 	max-height: 70vh;
 	white-space: pre-wrap;
-	font-size: 12px;
+	font-size: 14px;
 	-webkit-app-region: no-drag;
 	height: 100%;
     width: 100%;
@@ -64,12 +64,12 @@ button {
 	margin: 2px;
 }
 
-.glyphicon {
+.fa {
     font-size: 15px;
 }
 
 .info {
-	font-size: 14px;
+	font-size: 16px;
 }
 
 table {border: 0px solid #000; border-collapse: collapse; width: 100%}
@@ -105,9 +105,7 @@ table {border: 0px solid #000; border-collapse: collapse; width: 100%}
 	height: auto;
 	max-height: 400px;
 	overflow-x: hidden;
-	width: 200px
-}
-
-ul {
-	color: black;
+	width: 300px;
+	font-size: 12px;
+	padding-left: 8px
 }

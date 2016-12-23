@@ -5,9 +5,12 @@
 	<title id = "title">Lyrics!</title>
 	<!--Load jquery CDN-->
 	<script src = "https://code.jquery.com/jquery-3.1.0.js"></script>
-	<!--Load bootstrap js/css-->
+	<!--Load bootstrap js/css
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>-->
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
+	<script src="https://use.fontawesome.com/6cc80556c1.js"></script>
 	<!--Personal CSS-->
 	<link href="lyrics.css" rel="stylesheet"  type="text/css">
 	<script src = "getplaying.js"></script>
@@ -30,13 +33,13 @@
 						<tr><td>
 							<div class="addbuttonsdiv">
 								<button type="button" class="addbuttons close" onclick="window.close()">
-									<span class="glyphicon glyphicon-remove" style="color:white" ></span>
+									<i class="fa fa-times" aria-hidden="true" style="color:white"></i>
 								</button>
 								<button type="button" class="close addbuttons" onclick="settings()">
-									<span class="glyphicon glyphicon-wrench" style="color:white" ></span>
+									<i class="fa fa-wrench" aria-hidden="true" style="color:white"></i>
 								</button>
 								<button type="button" class="close addbuttons" onclick="getlyrics(helper)">
-									<span class="glyphicon glyphicon-refresh" style="color:white"></span>
+									<i class="fa fa-refresh" aria-hidden="true" style="color:white"></i>
 								</button>
 							</div>
 						</td></tr>
@@ -44,16 +47,10 @@
 						
 						<tr><td>
 							<div class="actions text-center dropdown" id="dropdownmenu">
-								<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="width:100px">More Lyrics</button>
-								<div class="dropdown-menu dropdown-menu-left scrollable-menu">
-								  <ul id="artistOptions" style="list-style: none">asdfsdfasd
-									<li> hi </li>
-									<li> hi </li>
-									<li> a </li>
-									<li> a </li>
-								  </ul>
+								<button class="btn btn-success btn-sm" id="showhide" style="width:100px" onclick="hidelyrics()">Hide Lyrics</button>
+								<button class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" style="width:100px">More Lyrics</button>
+								<div class="dropdown-menu dropdown-menu-right scrollable-menu" id="otherLyrics">
 								</div>
-								<button class="btn btn-success" id="showhide" style="width:100px" onclick="hidelyrics()">Hide Lyrics</button>
 							</div>
 						</td></tr>
 						

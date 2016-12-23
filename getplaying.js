@@ -10,17 +10,18 @@ var lsdist = require('fast-levenshtein')
 var song = "";
 var artist = "";
 var album = "";
+var maxListCount = 5;
 var helper = SpotifyWebHelper();
 var gui = require('nw.gui');
 var mainWin = gui.Window.get();
 
 var initialLyrics = function() {
+	console.log("Initial execution")
 	// Display loading animation
 	document.getElementById("loader").style.display = "block";
 	
 	// Initial load lyrics/album art
 	helper.player.on('ready',function() {
-		console.log("Helper on");
 		getAlbumArt(helper.status.track.album_resource.uri);
 		loadnewlyrics(helper.status.track);
 	});
@@ -77,27 +78,37 @@ var loadnewlyrics = function(track) {
 	song = track.track_resource.name;
 	artist = track.artist_resource.name;
 	album = track.album_resource.name;
-	console.log(artist + " " + song);
 	
 	// Write title and header (song + artist)
 	document.getElementById("title").innerHTML =  artist + ' - ' + song;
 	document.getElementById("class1").innerHTML ='<b>' + artist + '</b><br><i>' + song +'</i>';
 					
 	var searchterm = artist + " " + song;
-	searchterm = searchterm.replace(/[&]/," ");
-	console.log(searchterm);
+	searchterm = searchterm.replace(/[&%]/," ");
+	console.log("Searching for: " + artist + " " + song);
 	
 	// Get lyrics
-	console.log("Sending JSON request")
+	console.log("Sending Genius JSON request")
 	$.getJSON("http://api.genius.com/search?q=" + searchterm + "&access_token=Et0edLuuw1UqlTV1QlvgUg0WNPqmAgNnJ5UbbB6giV74xIZyJic2JxvNpzeXYGCa&callback=json", function(json){
 		try {
 			// Get url of lyrics page
 			var fulltitle = song + " by " + artist;
 			fulltitle = fulltitle.replace(/[&]/g,"");
 			var url = json.response.hits[0].result.url;
+			console.log("Found URL for: " + json.response.hits[0].result.full_title)
+			
+			//Populate dropdown list
+			$("#otherLyrics").empty();
+			for (i = 1; i <= maxListCount; i++) {
+				if (json.response.hits[i]) {
+					otherURL = json.response.hits[i].result.url;
+					otherURL = otherURL.slice(0,18) + "amp/" + otherURL.slice(18);
+					$("#otherLyrics").append('<a href="javascript:httpGet(&#39;' + otherURL + '&#39;)">    ' + json.response.hits[i].result.full_title + '</a><div class="dropdown-divider"></div>');
+				}
+			}
 			
 			// TEST levenshtein distance
-			console.log(fulltitle);
+			/*console.log(fulltitle);
 			console.log(json.response.hits[0].result.full_title);
 			console.log("Score: " + lsdist.get(fulltitle,json.response.hits[0].result.full_title));
 			
@@ -113,7 +124,7 @@ var loadnewlyrics = function(track) {
 				else {
 					url = json.response.hits[1].result.url;
 				}
-			}
+			}*/
 			
 			url = url.slice(0,18) + "amp/" + url.slice(18);
 			
