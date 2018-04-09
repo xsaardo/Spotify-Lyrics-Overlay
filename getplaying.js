@@ -38,19 +38,17 @@ var initialLyrics = function() {
 	
 	// Initial load lyrics/album art
 	helper.player.on('ready',function() {
-		getAlbumArt(helper.status.track.album_resource.uri);
 		loadnewlyrics(helper.status.track);
 	});
 	
 	// Upon track change update track info and lyrics
 	helper.player.on('track-change', function(track){
 		console.log("Track changed");
-		getAlbumArt(track.album_resource.uri);
 		loadnewlyrics(track);
 	});
 }
 
-var getlyrics = function(helper) {
+var getlyrics = function() {
 	console.log("Manual lyric request")
 	// If getlyrics called from hidden state
 	if (!hide){
@@ -66,13 +64,12 @@ var getlyrics = function(helper) {
 	var winHeight = $(window).height();
 	
 	// Reset window to default
-	document.getElementById("albumart").src = placeholderImg;
 	document.getElementById("showhide").innerHTML = "Hide Lyrics";
 	document.getElementById("lyrics").innerHTML = ""; 
 	
 	// Initial load lyrics
 	try {
-		getAlbumArt(helper.status.track.album_resource.uri);
+		console.log("hiding: " + helper.status.track);
 		loadnewlyrics(helper.status.track);
 	}
 	catch (err) {
@@ -94,31 +91,63 @@ var loadnewlyrics = function(track) {
 	}
 	
 	// Reset window to default
-	document.getElementById("albumart").src = placeholderImg;
 	document.getElementById("lyrics").innerHTML = ""; // Clear window
 	
 	// Find currently playing song info
-	song = track.track_resource.name;
-	artist = track.artist_resource.name;
-	album = track.album_resource.name;
+	var trackUri = track.track_resource.uri;
+	var albumUri = track.album_resource.uri;
 
+	console.log(trackUri);
 
+	trackUri = trackUri.split(":");
+	trackUri = trackUri[2];
 
-	// Write title and header (song + artist)
-	document.getElementById("title").innerHTML =  artist + ' - ' + song;
-	document.getElementById("class1").innerHTML ='<b>' + artist + '</b><br><i>' + song +'</i>';
-					
-	var searchterm = artist + " " + song;
-	searchterm = searchterm.replace(/[&%]/," ");
-	console.log("Searching for: " + artist + " " + song);
+	albumUri = albumUri.split(":");
+	albumUri = albumUri[2];
+	 
+	// Retrieve an access token.
+	spotifyApi.clientCredentialsGrant()
+	  .then(function(data) {
+	    console.log('The access token expires in ' + data.body['expires_in']);
+	    console.log('The access token is ' + data.body['access_token']);
+	 
+	    // Save the access token so that it's used in future calls
+	    spotifyApi.setAccessToken(data.body['access_token']);
+
+    	// fetch album art
+    	console.log("Album uri = " + albumUri);
+		spotifyApi.getAlbum(albumUri)
+		.then(result => document.getElementById("albumart").src = result.body.images[0].url);
+
+		// fetch track info
+		console.log("Track uri = " + trackUri);
+		spotifyApi.getTrack(trackUri).then(result => {
+			
+			var artists = result.body.artists[0].name;
+			var song = result.body.name;
+			var id = result.id;
+
+			for (i = 1; i < result.body.artists.length; i++) {
+				artists = artists + ", " + result.body.artists[i].name;
+			}
+			console.log(artists);
+
+			document.getElementById("title").innerHTML =  artists + ' - ' + song;
+			document.getElementById("class1").innerHTML ='<b>' + artists + '</b><br><i>' + song +'</i>';
+
+			var searchTerm = artists + " " + song;
+
+			getSongLyrics(searchTerm).then(result => {
+				document.getElementById("lyrics").innerHTML = result;
+				document.getElementById("loader").style.display = "none";
+			})
+
+		});
+
 	
-	// Get lyrics
-	console.log("Sending Genius JSON request")
-
-	getSongLyrics(searchterm).then(result => {
-		document.getElementById("lyrics").innerHTML = result;
-		document.getElementById("loader").style.display = "none";
-	})
+	  }, function(err) {
+	        console.log('Something went wrong when retrieving an access token', err);
+  	 });
 
 	/*
 	$.getJSON("http://api.genius.com/search?q=" + searchterm + "&access_token=Et0edLuuw1UqlTV1QlvgUg0WNPqmAgNnJ5UbbB6giV74xIZyJic2JxvNpzeXYGCa&callback=json", function(json){
@@ -266,34 +295,4 @@ function findAllSubstringInd(str, substring) {
 	}
 	indices.pop();
 	return indices;
-}
-
-// Alternate source of lyrics
-function altSearch(artist, song) {
-	
-}
-
-// Get album art from spotify
-function getAlbumArt(uri) {
-	uri = uri.split(":");
-	uri = uri[2];
-	 
-	// Retrieve an access token.
-	spotifyApi.clientCredentialsGrant()
-	  .then(function(data) {
-	    console.log('The access token expires in ' + data.body['expires_in']);
-	    console.log('The access token is ' + data.body['access_token']);
-	 
-	    // Save the access token so that it's used in future calls
-	    spotifyApi.setAccessToken(data.body['access_token']);
-
-		console.log(uri);
-		spotifyApi.getAlbum(uri)
-		.then(result => document.getElementById("albumart").src = result.body.images[0].url);
-
-	
-	  }, function(err) {
-	        console.log('Something went wrong when retrieving an access token', err);
-	  });
-
 }
