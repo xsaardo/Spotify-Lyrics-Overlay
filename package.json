@@ -3,12 +3,18 @@
   "main": "index.html",
   "version": "1.0",
   "window": {
+    "toolbar": true,
     "always_on_top": true,
     "resizable": true,
     "frame": false,
     "transparent": true
   },
   "dependencies": {
+    "@jonny/onetune-spotify": "^1.0.1",
+    "lyricist": "^2.2.2",
+    "simple-oauth2": "^1.5.2",
+    "spotify-web-api-node": "^3.0.0",
+    "spotify-web-helper": "^1.13.0",
     "string_score": "^0.1.22"
   }
 }

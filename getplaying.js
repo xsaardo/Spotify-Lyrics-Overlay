@@ -3,10 +3,13 @@ var hide = true;
 var currLyrics = "";
 var currHeight = 0;
 var currWidth = 0;
-var placeholderImg = "http://larics.rasip.fer.hr/wp-content/uploads/2016/04/default-placeholder.png";
 
-var SpotifyWebHelper = require('@jonny/spotify-web-helper');
-var lsdist = require('fast-levenshtein')
+var placeholderImg = "placeholder_album_art.jpeg";
+
+var SpotifyWebApi = require('spotify-web-api-node');
+var SpotifyWebHelper = require('spotify-web-helper');
+const Lyricist = require('lyricist');
+
 var song = "";
 var artist = "";
 var album = "";
@@ -15,8 +18,21 @@ var helper = SpotifyWebHelper();
 var gui = require('nw.gui');
 var mainWin = gui.Window.get();
 
+const access_token = "JK5Op4NX-2vNtN821RMDlbK9p38JgEeMxOLsb_lyy2g8u9LTB9u1tpmwzJGoSPDs";
+const lyricist = new Lyricist(access_token);
+
+const clientId = "3448610306b048e5942108a3db1d2536";
+const clientSecret = "82a8ade95d7149c59c7a9a99e1dc6c62";
+
+// Create the api object with the credentials
+var spotifyApi = new SpotifyWebApi({
+  clientId : clientId,
+  clientSecret : clientSecret
+});
+
 var initialLyrics = function() {
 	console.log("Initial execution")
+	
 	// Display loading animation
 	document.getElementById("loader").style.display = "block";
 	
@@ -26,7 +42,7 @@ var initialLyrics = function() {
 		loadnewlyrics(helper.status.track);
 	});
 	
-	// Upon track change execute...
+	// Upon track change update track info and lyrics
 	helper.player.on('track-change', function(track){
 		console.log("Track changed");
 		getAlbumArt(track.album_resource.uri);
@@ -64,6 +80,13 @@ var getlyrics = function(helper) {
 	}
 };
 
+const getSongLyrics = async function (searchterm) {
+	var lyrics = await lyricist.search(searchterm)
+		.then(result => lyricist.song(result[0].id, {fetchLyrics: true})
+		.then(result => result.lyrics)); 
+	return lyrics;
+}
+
 var loadnewlyrics = function(track) {
 	// Show loading animation
 	if (hide) {
@@ -74,11 +97,13 @@ var loadnewlyrics = function(track) {
 	document.getElementById("albumart").src = placeholderImg;
 	document.getElementById("lyrics").innerHTML = ""; // Clear window
 	
-	// Find currently playing song		
+	// Find currently playing song info
 	song = track.track_resource.name;
 	artist = track.artist_resource.name;
 	album = track.album_resource.name;
-	
+
+
+
 	// Write title and header (song + artist)
 	document.getElementById("title").innerHTML =  artist + ' - ' + song;
 	document.getElementById("class1").innerHTML ='<b>' + artist + '</b><br><i>' + song +'</i>';
@@ -89,6 +114,13 @@ var loadnewlyrics = function(track) {
 	
 	// Get lyrics
 	console.log("Sending Genius JSON request")
+
+	getSongLyrics(searchterm).then(result => {
+		document.getElementById("lyrics").innerHTML = result;
+		document.getElementById("loader").style.display = "none";
+	})
+
+	/*
 	$.getJSON("http://api.genius.com/search?q=" + searchterm + "&access_token=Et0edLuuw1UqlTV1QlvgUg0WNPqmAgNnJ5UbbB6giV74xIZyJic2JxvNpzeXYGCa&callback=json", function(json){
 		try {
 			// Get url of lyrics page
@@ -124,7 +156,7 @@ var loadnewlyrics = function(track) {
 				else {
 					url = json.response.hits[1].result.url;
 				}
-			}*/
+			}
 			
 			url = url.slice(0,18) + "amp/" + url.slice(18);
 			
@@ -146,6 +178,7 @@ var loadnewlyrics = function(track) {
 	.fail(function() {
 		alert('Failed Genius search request')
 	});
+	*/
 }
 
 var hidelyrics = function() {
@@ -244,7 +277,23 @@ function altSearch(artist, song) {
 function getAlbumArt(uri) {
 	uri = uri.split(":");
 	uri = uri[2];
-	$.getJSON("https://api.spotify.com/v1/albums/" + uri, function(response){
-		document.getElementById("albumart").src = response.images[0].url
-	})
+	 
+	// Retrieve an access token.
+	spotifyApi.clientCredentialsGrant()
+	  .then(function(data) {
+	    console.log('The access token expires in ' + data.body['expires_in']);
+	    console.log('The access token is ' + data.body['access_token']);
+	 
+	    // Save the access token so that it's used in future calls
+	    spotifyApi.setAccessToken(data.body['access_token']);
+
+		console.log(uri);
+		spotifyApi.getAlbum(uri)
+		.then(result => document.getElementById("albumart").src = result.body.images[0].url);
+
+	
+	  }, function(err) {
+	        console.log('Something went wrong when retrieving an access token', err);
+	  });
+
 }
