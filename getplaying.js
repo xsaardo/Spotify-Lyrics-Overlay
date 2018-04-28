@@ -17,6 +17,7 @@ var maxListCount = 5;
 var helper = SpotifyWebHelper();
 var gui = require('nw.gui');
 var mainWin = gui.Window.get();
+mainWin.setVisibleOnAllWorkspaces(true);
 
 const access_token = "JK5Op4NX-2vNtN821RMDlbK9p38JgEeMxOLsb_lyy2g8u9LTB9u1tpmwzJGoSPDs";
 const lyricist = new Lyricist(access_token);
@@ -77,10 +78,38 @@ var getlyrics = function() {
 	}
 };
 
+const getSongLyricsById = async function(id) {
+	var lyrics = await lyricist.song(id, {fetchLyrics: true}).then(result => result.lyrics)
+	document.getElementById("lyrics").innerHTML = lyrics;
+}
+
 const getSongLyrics = async function (searchterm) {
+	console.log("Searching for " + searchterm);
 	var lyrics = await lyricist.search(searchterm)
-		.then(result => lyricist.song(result[0].id, {fetchLyrics: true})
-		.then(result => result.lyrics)); 
+		.then(result => {			
+			// fetch alternate lyrics
+			// Populate dropdown list
+			var maxListCount = result.length
+			if (maxListCount > 0) {
+				console.log("Song id " + result[0].id);
+				$("#otherLyrics").empty();
+				for (i = 1; i <= maxListCount; i++) {
+					if (result[i]) {
+						var songName = result[i].full_title
+						$("#otherLyrics").append('<a href="javascript:getSongLyricsById(' + result[i].id + ')">' + songName + '</a><div class="dropdown-divider"></div>');
+					}
+				}
+
+				return  lyricist.song(result[0].id, {fetchLyrics: true})
+					.then(result2 => {
+						return result2.lyrics;
+					});
+			}
+			else {
+				return "Lyrics not found";
+			}
+		}); 
+	console.log("Lyrics: " + lyrics)
 	return lyrics;
 }
 
@@ -97,7 +126,7 @@ var loadnewlyrics = function(track) {
 	var trackUri = track.track_resource.uri;
 	var albumUri = track.album_resource.uri;
 
-	console.log(trackUri);
+	console.log("Track URI " + trackUri);
 
 	trackUri = trackUri.split(":");
 	trackUri = trackUri[2];
