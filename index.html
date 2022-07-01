@@ -1,82 +1,34 @@
 <!DOCTYPE html>
-<html>
-  
-  <head>
-  <title id = "title">Lyrics!</title>
-  <!--Load jquery CDN-->
+  <title>Lyrics!</title>
+  <meta charset="UTF-8" >
   <script src = "https://code.jquery.com/jquery-3.1.0.js"></script>
-  <!--Load bootstrap js/css
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>-->
-  <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
-  <script src="https://use.fontawesome.com/6cc80556c1.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
   <!--Personal CSS-->
-  <link href="lyrics.css" rel="stylesheet"  type="text/css">
-  <script src = "getplaying.js"></script>
+  <link href="src/lyrics.css" rel="stylesheet">
   
-  <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/string_score/0.1.22/string_score.js"></script> -->
-  </head>
-  
-  <body>
-  <div class="header1">
+  <div class="header">
     <table>
       <tr>
-        <td style="width:100px">
+        <td class="albumart-cell">
           <div class="albumart text-left">
-            <img id="albumart" src="placeholder_album_art.jpeg" alt="Album Art">
+            <img class="albumart-img" src="resources/placeholder_album_art.jpeg" alt="Album Art">
           </div>
-        </td>
-        
         <td>
           <table>
-            <tr><td>
-              <div class="addbuttonsdiv">
-                <button type="button" class="addbuttons close" onclick="window.close()">
-                  <i class="fa fa-times" aria-hidden="true" style="color:white"></i>
-                </button>
-                <button type="button" class="close addbuttons" onclick="settings()">
-                  <i class="fa fa-wrench" aria-hidden="true" style="color:white"></i>
-                </button>
-                <button type="button" class="close addbuttons" onclick="getlyrics(helper)">
-                  <i class="fa fa-refresh" aria-hidden="true" style="color:white"></i>
-                </button>
-              </div>
-            </td></tr>
-            <tr><td><div id="class1" class="info"></div></td></tr>
-            
-            <tr><td>
-              <div class="actions text-center dropdown" id="dropdownmenu">
-                <button class="btn btn-success btn-sm" id="showhide" style="width:100px" onclick="hidelyrics()">Hide Lyrics</button>
-                <button class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" style="width:100px">More Lyrics</button>
-                <div class="dropdown-menu dropdown-menu-right scrollable-menu" id="otherLyrics">
-                </div>
-              </div>
-            </td></tr>
-            
-          </table>  
-        </td>
-      </tr>
+            <tr>
+              <td>
+                <div class="info"></div>
+            <tr>
+              <td>
+                <button class="btn btn-primary btn-sm" onclick="LYRICS_APP.getLyrics()">Get Lyrics</button>
+                <button class="showhide btn btn-success btn-sm" onclick="LYRICS_APP.hideLyrics()">Hide Lyrics</button>
+          </table>
     </table>
   </div>
-  
-  
-    <div class="lyricsOuter" style="display:flex;justify-content:center;align-items:center;">
-      <div class="loader" id="loader" style="width:120px;height:120px;"></div>
-    </div>
-    <div class="lyrics" id="lyrics"></div>
-    
-  
-  <script>
-    window.onload = function() {
-      window.moveTo(window.screen.availWidth,150);
-      window.resizeTo(350,420);
-      var winHeight = 420;
-      var winWidth = 350;
-      initialLyrics();
-    }
-  </script>
-  </body>
-  
-</html>
+
+  <div class="lyrics-outer">
+    <div class="loader"></div>
+  </div>
+  <div class="lyrics"></div>
+
+  <script src = "src/getplaying.js"></script>
