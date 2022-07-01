@@ -32,3 +32,13 @@
   <div class="lyrics"></div>
 
   <script src = "src/getplaying.js"></script>
+
+  <script>
+    var path = './';
+    var fs = require('fs');
+    
+    var reloadWatcher=fs.watch(path, { recursive: true }, function() {
+      location.reload();
+      reloadWatcher.close();
+    });
+  </script>
