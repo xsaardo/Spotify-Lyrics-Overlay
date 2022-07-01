@@ -1,4 +1,4 @@
-const Genius = require("genius-lyrics");
+const Genius = require('genius-lyrics');
 const applescript = require('applescript');
 const client = new Genius.Client();
 
@@ -9,34 +9,30 @@ const HIDDEN_LYRICS_HEIGHT = 120;
 const LYRICS_APP = (function () {
   const state = {
     isHidden: false,
-    currLyrics: "",
+    currLyrics: '',
     winHeight: DEFAULT_WIN_HEIGHT,
     winWidth: DEFAULT_WIN_WIDTH,
   };
 
   function init() {
-    console.log("Initial execution")
-    window.onload = function() {
-      window.moveTo(window.screen.availWidth,150);
-      window.resizeTo(DEFAULT_WIN_WIDTH,DEFAULT_WIN_HEIGHT);
-    }
-    loadNewLyrics()
+    console.log('Initial execution');
+    loadNewLyrics();
   };
 
   function loadNewLyrics() {
-    console.log("loading new lyrics");
+    console.log('loading new lyrics');
     if (state.isHidden) {
       window.resizeTo(state.winWidth, state.winHeight);
       state.isHidden = false;
     }
 
-    document.querySelector(".loader").style.display = "block";
+    document.querySelector('.loader').style.display = 'block';
     
     // Reset window to default
-    document.querySelector(".showhide").textContent = "Hide Lyrics";
-    document.querySelector(".lyrics").textContent = ""; // Clear window
+    document.querySelector('.showhide').textContent = 'Hide Lyrics';
+    document.querySelector('.lyrics').textContent = ''; // Clear window
     
-    applescript.execFile("src/getplaying.applescript", (err, rtn) => {
+    applescript.execFile('src/getplaying.applescript', (err, rtn) => {
       if (err) {
         console.log(err);
       }
@@ -45,20 +41,20 @@ const LYRICS_APP = (function () {
       const song = track[1];
       const albumArtUrl = track[2];
       console.log(track);
-      searchForSongLyrics(artist + " " + song).then(lyrics => {
-        document.querySelector(".lyrics").textContent = lyrics;
-        document.querySelector(".albumart-img").src = albumArtUrl;
+      searchForSongLyrics(artist + ' ' + song).then(lyrics => {
+        document.querySelector('.lyrics').textContent = lyrics;
+        document.querySelector('.albumart-img').src = albumArtUrl;
         //document.querySelector(".artist").textContent = artist;
         //document.querySelector(".song").textContent = song;
-        document.querySelector(".info").innerHTML ='<b>' + song + '</b><br>' + artist;
-        document.querySelector(".loader").style.display = "none";
-        state.currLyrics = lyrics
+        document.querySelector('.info').innerHTML ='<b>' + song + '</b><br>' + artist;
+        document.querySelector('.loader').style.display = 'none';
+        state.currLyrics = lyrics;
       })
     });
   };
 
   const searchForSongLyrics = async function (searchTerm) {
-    console.log("Searching for " + searchTerm);
+    console.log('Searching for ' + searchTerm);
     const searches = await client.songs.search(searchTerm, { limit: 1 });
     const song = searches[0];
     const lyrics = await song.lyrics();
@@ -68,32 +64,32 @@ const LYRICS_APP = (function () {
   function hideLyrics() {
     if (!state.isHidden) {
       // Hiding lyrics
-      document.querySelector(".loader").style.display = "none";
-      state.winWidth = $(window).width()
-      state.winHeight = $(window).height()
-      document.querySelector(".lyrics").textContent = "";
+      document.querySelector('.loader').style.display = 'none';
+      state.winWidth = $(window).width();
+      state.winHeight = $(window).height();
+      document.querySelector('.lyrics').textContent = '';
       window.resizeTo(DEFAULT_WIN_WIDTH, HIDDEN_LYRICS_HEIGHT);
       state.isHidden = true;
-      document.querySelector(".showhide").textContent = "Show Lyrics";
+      document.querySelector('.showhide').textContent = 'Show Lyrics';
     }
     else {
       // Showing lyrics
-      if (state.currLyrics == "") {
+      if (state.currLyrics == '') {
         loadNewLyrics();
       }
       else {
-        document.querySelector(".lyrics").textContent = state.currLyrics;
+        document.querySelector('.lyrics').textContent = state.currLyrics;
       }
       window.resizeTo(state.winWidth, state.winHeight);
       state.isHidden = false;
-      document.querySelector(".showhide").textContent = "Hide Lyrics";
+      document.querySelector('.showhide').textContent = 'Hide Lyrics';
     }
   };
 
   return {
     init: init,
     hideLyrics: hideLyrics,
-    getLyrics: loadNewLyrics
+    getLyrics: loadNewLyrics,
   };
 })();
 
