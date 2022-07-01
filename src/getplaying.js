@@ -74,7 +74,7 @@ const LYRICS_APP = (function () {
     }
     else {
       // Showing lyrics
-      if (state.currLyrics == '') {
+      if (state.currLyrics === '') {
         loadNewLyrics();
       }
       else {
