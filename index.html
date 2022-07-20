@@ -9,20 +9,17 @@
   <div class="header">
     <table>
       <tr>
-        <td class="albumart-cell">
+        <td class="albumart-cell" rowspan="2">
           <div class="albumart text-left">
             <img class="albumart-img" src="resources/placeholder_album_art.jpeg" alt="Album Art">
           </div>
+        <td class="info">
+          <div class="song">song</div>
+          <div class="artist">artist</div>
+      <tr>
         <td>
-          <table>
-            <tr>
-              <td>
-                <div class="info"></div>
-            <tr>
-              <td>
-                <button class="btn btn-primary btn-sm" onclick="LYRICS_APP.getLyrics()">Get Lyrics</button>
-                <button class="showhide btn btn-success btn-sm" onclick="LYRICS_APP.hideLyrics()">Hide Lyrics</button>
-          </table>
+          <button class="btn btn-primary btn-sm" onclick="LYRICS_APP.getLyrics()">Get Lyrics</button>
+          <button class="showhide btn btn-success btn-sm" onclick="LYRICS_APP.hideLyrics()">Hide Lyrics</button>
     </table>
   </div>
 

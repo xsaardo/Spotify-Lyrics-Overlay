@@ -7,23 +7,32 @@ body {
 }
 
 table {
-  border: 0px solid #000;
+  border: 1px solid #fff;
   border-collapse: collapse;
+  table-layout: fixed;
   width: 100%;
+}
+
+tr {
+  border: 1px solid #fff;
+}
+
+td {
+  border: 1px solid #fff;
 }
 
 .header {
   -webkit-app-region: drag;
   height: 20vh;
-  min-height: 120px;
+  min-height: 125px;
 }
 
 .albumart-cell {
-  width: 100px;
+  width: 120px;
 }
 
 .albumart {
-  padding: 10px 0px 0px 10px;
+  padding: 10px 0px 10px 10px;
 }
 
 .albumart-img {
@@ -33,7 +42,31 @@ table {
 }
 
 .info {
+  padding: 0px 10px 0px 10px;
+}
+
+.song {
   font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transform: ;
+}
+@keyframes scroll-left {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+
+.artist {
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .btn {

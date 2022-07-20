@@ -44,9 +44,9 @@ const LYRICS_APP = (function () {
       searchForSongLyrics(artist + ' ' + song).then(lyrics => {
         document.querySelector('.lyrics').textContent = lyrics;
         document.querySelector('.albumart-img').src = albumArtUrl;
-        //document.querySelector(".artist").textContent = artist;
-        //document.querySelector(".song").textContent = song;
-        document.querySelector('.info').innerHTML ='<b>' + song + '</b><br>' + artist;
+        document.querySelector(".artist").textContent = artist;
+        document.querySelector(".song").textContent = song;
+        //document.querySelector('.info').innerHTML ='<b>' + song + '</b><br>' + artist;
         document.querySelector('.loader').style.display = 'none';
         state.currLyrics = lyrics;
       })
